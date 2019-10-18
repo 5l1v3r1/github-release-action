@@ -40,10 +40,5 @@ then
     new="v$new"
 fi
 
-echo $new
-
-# set output
-echo ::set-output name=new_tag::$new
-
 # release to github
 hub release create $new

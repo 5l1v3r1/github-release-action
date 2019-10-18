@@ -42,10 +42,5 @@ fi
 
 # release to github
 
-cat <<EOT >> ~/.config/hub
- github.com:
- - user: test
-EOT
-
 export HUB_VERBOSE=1
 hub release create -m "Auto release" $new

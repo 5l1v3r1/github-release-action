@@ -69,4 +69,6 @@ user=${BASH_REMATCH[4]}
 repo=${BASH_REMATCH[5]}
 fi
 
+echo "https://api.github.com/repos/$user/$repo/releases"
+
 curl --data "$(generate_post_data)" "https://api.github.com/repos/$user/$repo/releases?access_token=$token"

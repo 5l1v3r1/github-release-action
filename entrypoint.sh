@@ -41,4 +41,4 @@ then
 fi
 
 # release to github
-hub release create $new
+hub release -m "" create $new

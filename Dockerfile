@@ -9,6 +9,5 @@ COPY entrypoint.sh /entrypoint.sh
 
 RUN apk add --no-cache python python-dev python3 python3-dev \
     linux-headers build-base bash git ca-certificates && \
-    rm -r /root/.cache
 
 ENTRYPOINT ["/entrypoint.sh"]

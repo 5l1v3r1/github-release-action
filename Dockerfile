@@ -1,8 +1,9 @@
-FROM lgohr/github-hub
+FROM alpine
 
 COPY ./contrib/semver ./contrib/semver
 RUN install ./contrib/semver /usr/local/bin
-RUN apt update && apt install -y curl jq
-ADD entrypoint.sh /entrypoint.sh
+COPY entrypoint.sh /entrypoint.sh
+
+RUN apk update && apk add bash git curl jq
 
 ENTRYPOINT ["/entrypoint.sh"]

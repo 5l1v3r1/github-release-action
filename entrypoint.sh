@@ -41,6 +41,32 @@ then
 fi
 
 # release to github
+generate_post_data()
+{
+  cat <<EOF
+{
+  "tag_name": "$new",
+  "target_commitish": "",
+  "name": "Auto release",
+  "body": "",
+  "draft": false,
+  "prerelease": false
+}
+EOF
+}
 
-export HUB_VERBOSE=1
-hub release create -m "Auto release" $new
+
+token=${GITHUB_TOKEN}
+repo_full_name=$(git config --get remote.origin.url)
+url=$repo_full_name
+re="^(https|git)(:\/\/|@)([^\/:]+)[\/:]([^\/:]+)\/(.+).git$"
+
+if [[ $url =~ $re ]]; then
+protocol=${BASH_REMATCH[1]}
+separator=${BASH_REMATCH[2]}
+hostname=${BASH_REMATCH[3]}
+user=${BASH_REMATCH[4]}
+repo=${BASH_REMATCH[5]}
+fi
+
+curl --data "$(generate_post_data)" "https://api.github.com/repos/$user/$repo/releases?access_token=$token"

@@ -1,4 +1,4 @@
-FROM ubuntu:latest
+FROM alpine
 
 COPY ./contrib/semver ./contrib/semver
 RUN install ./contrib/semver /usr/local/bin

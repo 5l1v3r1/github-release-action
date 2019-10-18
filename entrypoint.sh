@@ -41,4 +41,4 @@ then
 fi
 
 # release to github
-env HUB_VERBOSE=1 hub release create -m "Auto release" $new
+env GITHUB_USER=empty hub release create -m "Auto release" $new

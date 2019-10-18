@@ -41,6 +41,10 @@ then
 fi
 
 # release to github
+branch=$(git rev-parse --abbrev-ref HEAD)
+repo_full_name=$(git config --get remote.origin.url | sed 's/.*:\/\/github.com\///;s/.git$//')
+token=${GITHUB_TOKEN}
+
 generate_post_data()
 {
   cat <<EOF
@@ -55,20 +59,5 @@ generate_post_data()
 EOF
 }
 
-
-token=${GITHUB_TOKEN}
-repo_full_name=$(git config --get remote.origin.url)
-url=$repo_full_name
-re="^(https|git)(:\/\/|@)([^\/:]+)[\/:]([^\/:]+)\/(.+).git$"
-
-if [[ $url =~ $re ]]; then
-protocol=${BASH_REMATCH[1]}
-separator=${BASH_REMATCH[2]}
-hostname=${BASH_REMATCH[3]}
-user=${BASH_REMATCH[4]}
-repo=${BASH_REMATCH[5]}
-fi
-
-echo "https://api.github.com/repos/$user/$repo/releases"
-
-curl --data "$(generate_post_data)" "https://api.github.com/repos/$user/$repo/releases?access_token=$token"
+echo "Create release $version for repo: $repo_full_name branch: $branch"
+curl --data "$(generate_post_data)" "https://api.github.com/repos/$repo_full_name/releases?access_token=$token"

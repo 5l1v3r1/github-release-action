@@ -1,5 +1,5 @@
 name: 'Github Release Action'
-description: 'Publish releases to with automatic incremental tagging.'
+description: 'Publish releases with automatic incremental tagging.'
 author: 'Yigitcan Alanyali'
 runs:
   using: 'docker'

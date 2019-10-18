@@ -45,6 +45,7 @@ fi
 # cd .. && mv client/build ./build
 # rm -rf client && mkdir client && mv ./build client/
 tar zcvf release.tar.gz *
+mv /release.py ./release.py
 
 # release to github
 branch=$(git rev-parse --abbrev-ref HEAD)

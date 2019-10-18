@@ -1,0 +1,12 @@
+name: 'Github Release Action'
+description: 'Publish releases to with automatic incremental tagging.'
+author: 'Yigitcan Alanyali'
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+outputs:
+  new_tag:
+    description: 'Generated tag'
+branding:
+  icon: 'git-merge'  
+  color: 'purple'

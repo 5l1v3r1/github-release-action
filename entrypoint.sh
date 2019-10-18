@@ -45,11 +45,11 @@ fi
 # cd .. && mv client/build ./build
 # rm -rf client && mkdir client && mv ./build client/
 tar zcvf release.tar.gz *
-mv /release.py ./release.py
+# mv /release.py ./release.py
 
 # release to github
 branch=$(git rev-parse --abbrev-ref HEAD)
 repo_full_name=$(git config --get remote.origin.url | sed 's/.*:\/\/github.com\///;s/.git$//')
 token=${GITHUB_TOKEN}
 
-./release.py $repo_full_name $new ./release.tar.gz
+release-uploader $repo_full_name $new ./release.tar.gz

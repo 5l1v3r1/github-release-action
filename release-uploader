@@ -21,7 +21,7 @@ _json = json.loads(urlopen(Request(
     json.dumps({
         'tag_name': tag,
         'name': tag,
-        'prerelease': True,
+        'prerelease': False,
     }).encode(),
     headers={
         'Accept': 'application/vnd.github.v3+json',

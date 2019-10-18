@@ -1,4 +1,3 @@
-  
 FROM node:10-alpine
 
 COPY ./contrib/semver ./contrib/semver

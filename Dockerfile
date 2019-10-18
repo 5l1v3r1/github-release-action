@@ -1,4 +1,4 @@
-FROM ubuntu:latest
+FROM debian
 
 COPY ./contrib/semver ./contrib/semver
 RUN install ./contrib/semver /usr/local/bin

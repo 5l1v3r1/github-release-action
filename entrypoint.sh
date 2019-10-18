@@ -40,24 +40,15 @@ then
     new="v$new"
 fi
 
+# create build
+# cd client && npm install --production && npm run build
+# cd .. && mv client/build ./build
+# rm -rf client && mkdir client && mv ./build client/
+tar zcvf release.tar.gz *
+
 # release to github
 branch=$(git rev-parse --abbrev-ref HEAD)
 repo_full_name=$(git config --get remote.origin.url | sed 's/.*:\/\/github.com\///;s/.git$//')
 token=${GITHUB_TOKEN}
 
-generate_post_data()
-{
-  cat <<EOF
-{
-  "tag_name": "$new",
-  "target_commitish": "",
-  "name": "Auto release",
-  "body": "",
-  "draft": false,
-  "prerelease": false
-}
-EOF
-}
-
-echo "Create release $version for repo: $repo_full_name branch: $branch"
-curl --data "$(generate_post_data)" "https://api.github.com/repos/$repo_full_name/releases?access_token=$token"
+./release.py $repo_full_name $new ./release.tar.gz

@@ -6,6 +6,7 @@ import sys
 
 from urllib.parse import urlencode
 from urllib.request import Request, urlopen
+from urllib.error import HTTPError
 
 repo = sys.argv[1]
 tag = sys.argv[2]
@@ -15,37 +16,54 @@ token = os.environ['GITHUB_TOKEN']
 
 url_template = 'https://{}.github.com/repos/' + repo + '/releases'
 
-# Create.
-_json = json.loads(
-    urlopen(
-        Request(
-            url_template.format('api'),
-            json.dumps({
-                'tag_name': tag,
-                'name': tag,
-                'prerelease': False
-            }).encode(),
-            headers={
-                'Accept': 'application/vnd.github.v3+json',
-                'Authorization': 'token ' + token
-            },
-        )).read().decode())
-release_id = _json['id']
-
-# Upload.
-with open(upload_file, 'br') as myfile:
-    content = myfile.read()
+# Check the release already exists.
+try:
     _json = json.loads(
         urlopen(
             Request(
-                url_template.format('uploads') + '/' + str(release_id) +
-                '/assets?' + urlencode({
-                    'name': os.path.split(upload_file)[1]
-                }),
-                content,
+                url_template.format('api') + '/tags/' + tag,
                 headers={
                     'Accept': 'application/vnd.github.v3+json',
-                    'Authorization': 'token ' + token,
-                    'Content-Type': 'application/zip'
+                    'Authorization': 'token ' + token
                 },
             )).read().decode())
+except HTTPError as e:
+    if e.code == 404:
+        release_exists = False
+    else:
+        raise e
+else:
+    release_exists = True
+    release_id = _json['id']
+
+if not release_exists:
+    # Create.
+    _json = json.loads(
+        urlopen(
+            Request(
+                url_template.format('api'),
+                json.dumps({
+                    'tag_name': tag,
+                    'name': tag,
+                    'prerelease': False
+                }).encode(),
+                headers={
+                    'Accept': 'application/vnd.github.v3+json',
+                    'Authorization': 'token ' + token
+                },
+            )).read().decode())
+    release_id = _json['id']
+
+    # Upload.
+    with open(upload_file, 'br') as myfile:
+        content = myfile.read()
+        _json = json.loads(urlopen(Request(
+            url_template.format('uploads') + '/' + str(release_id) + '/assets?'
+            + urlencode({'name': os.path.split(upload_file)[1]}),
+            content,
+            headers={
+                'Accept': 'application/vnd.github.v3+json',
+                'Authorization': 'token ' + token,
+                'Content-Type': 'application/zip'
+            },
+        )).read().decode())

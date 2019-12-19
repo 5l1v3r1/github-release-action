@@ -67,3 +67,5 @@ if not release_exists:
                 'Content-Type': 'application/zip'
             },
         )).read().decode())
+else:
+    sys.exit("Error: Release exists.")

@@ -16,7 +16,7 @@ token = os.environ['GITHUB_TOKEN']
 
 url_template = 'https://{}.github.com/repos/' + repo + '/releases'
 
-# Check the release already exists.
+# Check if the release already exists
 try:
     _json = json.loads(
         urlopen(
@@ -37,7 +37,7 @@ else:
     release_id = _json['id']
 
 if not release_exists:
-    # Create.
+    # Create
     _json = json.loads(
         urlopen(
             Request(
